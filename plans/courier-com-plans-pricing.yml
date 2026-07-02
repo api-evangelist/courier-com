@@ -1,0 +1,111 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Courier
+providerId: courier-com
+created: '2026-07-02'
+modified: '2026-07-02'
+reconciled: false
+tags:
+- Notifications
+- Messaging
+- Multi-Channel
+- Plans
+- Usage-Based
+description: >-
+  Courier pricing is usage-based and metered on notifications sent - a single
+  send counts regardless of channel (email, SMS, push, in-app inbox, chat). The
+  Developer tier is free up to a monthly notification allowance and includes the
+  core platform (send API, templates/journeys, broadcasts, internationalization).
+  The Business tier is pure pay-as-you-go at a per-notification rate with no
+  volume cap and adds features like AI translations and the AI Agent node.
+  Enterprise is custom-priced with volume discounts, SLAs, RBAC, observability
+  integrations, and EU data residency. Exact rates should be reconciled against
+  the live pricing page.
+notes: >-
+  As of the review date Courier lists a free Developer tier (~10k notifications /
+  month), a Business tier at ~$0.005 per notification sent, and a custom
+  Enterprise tier. Channel provider costs (e.g. your own SMS/email vendor) may be
+  separate depending on setup. Verify current allowances and per-send rate on the
+  Courier pricing page during reconciliation.
+sources:
+- https://www.courier.com/pricing
+- https://www.courier.com/docs
+plans:
+- id: courier-developer
+  name: Developer
+  type: free
+  description: >-
+    Free tier for building and small-volume production use, including the send
+    API, notification templates and journeys, broadcasts, and
+    internationalization, with a monthly notification allowance.
+  entries:
+  - label: Included Notifications
+    name: developer_notifications
+    type: usage
+    metric: notifications
+    limit: 10000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: free up to the monthly allowance
+    userMultiplied: false
+  elements:
+  - name: Send API
+  - name: Templates and Journeys
+  - name: Broadcasts
+  - name: Internationalization
+  - name: In-App Inbox
+  - name: Email and Chat Support
+- id: courier-business
+  name: Business
+  type: usage
+  description: >-
+    Pay-as-you-go tier with no volume cap, billed per notification sent across
+    all channels. Adds AI translations and the AI Agent node on top of the
+    Developer feature set.
+  entries:
+  - label: Notifications Sent
+    name: business_notifications
+    type: usage
+    metric: notifications
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: ~$0.005 per notification sent (verify on pricing page)
+    userMultiplied: false
+  elements:
+  - name: Unlimited Volume
+  - name: AI Translations
+  - name: AI Agent Node
+  - name: Send API and Templates
+  - name: In-App Inbox
+- id: courier-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Custom-priced tier for high volume with volume discounts, enterprise SLA,
+    RBAC, observability integrations, dedicated support, and EU data residency
+    options.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Volume Discounts
+  - name: Enterprise SLA
+  - name: Role-Based Access Control
+  - name: Observability Integrations
+  - name: EU Data Residency
+  - name: Dedicated Support
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

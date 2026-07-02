@@ -1,0 +1,95 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Courier
+providerId: courier-com
+created: '2026-07-02'
+modified: '2026-07-02'
+reconciled: false
+tags:
+- Notifications
+- Messaging
+- Multi-Channel
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Courier spend. Courier is billed on a usage basis metered on
+  notifications sent - one send counts once regardless of how many channels it
+  fans out to (email, SMS, push, in-app inbox, chat). A free Developer allowance
+  covers low volume; the Business tier is pay-as-you-go per notification with no
+  cap; Enterprise is custom with volume discounts. The dominant cost driver is
+  notification volume, so cost control centers on suppressing unnecessary sends,
+  honoring user preferences and subscription topics, batching via automations, and
+  using idempotency to avoid duplicate charges. Note that downstream channel
+  providers (your own SMS/email/push vendors) may carry their own separate costs.
+notes: >-
+  Per-notification rates and the free allowance should be reconciled against the
+  Courier pricing page. Courier's charge is per notification sent to Courier;
+  underlying carrier/provider fees for the actual email/SMS delivery may be billed
+  separately depending on your integration.
+sources:
+- https://www.courier.com/pricing
+- https://www.courier.com/docs
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Courier
+serviceCategory: Notifications and Messaging
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: Courier
+  ServiceCategory: Notifications and Messaging
+  ProviderName: Courier
+  PublisherName: Courier
+  InvoiceIssuerName: Courier
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: notifications_sent
+  description: Notifications sent to Courier, billed per send regardless of channel count. The primary cost driver.
+  unit: notifications
+  aggregation: sum
+  dimensions:
+  - account
+  - environment
+  - template
+  - channel
+- name: bulk_notifications
+  description: Notifications dispatched through bulk jobs; count as sends.
+  unit: notifications
+  aggregation: sum
+  dimensions:
+  - account
+  - job
+- name: automation_notifications
+  description: Notifications produced by automation/journey runs; count as sends.
+  unit: notifications
+  aggregation: sum
+  dimensions:
+  - account
+  - automation
+principles:
+- name: Visibility
+  description: Track notifications sent per template, channel, tenant, and environment; separate test from production so evaluation traffic is not mistaken for billable volume.
+- name: Allocation
+  description: Tag sends by tenant and template so notification cost maps to products, teams, and customers in multi-tenant apps.
+- name: Optimization
+  description: Honor user preferences and subscription topics to suppress unwanted sends, batch and throttle via automations, dedupe with idempotency keys, and consolidate multi-channel routing into a single send rather than repeated sends.
+- name: Accountability
+  description: Assign owners per template/tenant and review monthly notification volume against the free allowance or the per-send Business rate, plus any separate downstream carrier fees.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

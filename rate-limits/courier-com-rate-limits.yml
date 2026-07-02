@@ -1,0 +1,72 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Courier
+providerId: courier-com
+created: '2026-07-02'
+modified: '2026-07-02'
+reconciled: false
+tags:
+- Notifications
+- Messaging
+- Multi-Channel
+- Rate Limiting
+- Quotas
+description: >-
+  Courier applies per-endpoint rate limits on the REST API (base
+  https://api.courier.com) and returns HTTP 429 when a limit is exceeded. Some
+  configuration/management endpoints are rate limited more tightly than the
+  high-throughput Send API. Courier's documentation calls out specific limits on
+  a few endpoint families - for example Lists write operations and Events PUT at
+  roughly 20 requests/minute, and Brands PUT at roughly 200 requests/minute - and
+  enforces a maximum request body size of 6 MB across all endpoints (returning
+  413 Payload Too Large). Idempotency keys, supplied via the Idempotency-Key
+  header, are honored for 24 hours to safely retry sends.
+notes: >-
+  Numeric limits vary by endpoint and plan and are not exhaustively published;
+  the values below are the ones Courier documents plus general guidance. Verify
+  current per-endpoint limits and any plan-based throughput ceilings with Courier
+  support or the API reference during reconciliation. Handle 429 with exponential
+  backoff and honor Retry-After.
+sources:
+- https://www.courier.com/docs/reference
+- https://www.courier.com/docs/reference/get-started
+responseCodes:
+  throttled: 429
+  payloadTooLarge: 413
+limits:
+- name: Send API
+  scope: account
+  metric: requests
+  limit: high-throughput (not a documented fixed number)
+  notes: The POST /send endpoint is built for volume; per-account throughput follows your plan rather than a small fixed cap.
+- name: Lists Write Operations
+  scope: account
+  metric: requests
+  limit: ~20 per minute
+  notes: POST/PUT operations on the Lists API are documented at roughly 20 requests/minute.
+- name: Events PUT
+  scope: account
+  metric: requests
+  limit: ~20 per minute
+  notes: PUT requests on the Events API are documented at roughly 20 requests/minute.
+- name: Brands PUT
+  scope: account
+  metric: requests
+  limit: ~200 per minute
+  notes: PUT requests on the Brands API are documented at roughly 200 requests/minute.
+- name: Request Body Size
+  scope: request
+  metric: bytes
+  limit: 6 MB
+  notes: All Courier API endpoints reject request bodies larger than 6 MB with 413 Payload Too Large.
+policies:
+- name: Idempotency
+  description: Pass an Idempotency-Key header on send requests to safely retry without duplicate notifications; keys are honored for 24 hours.
+- name: Backoff Strategy
+  description: On a 429 response, back off exponentially with jitter and honor the Retry-After header before retrying.
+- name: Environment Scoping
+  description: API keys and limits are scoped per environment (test vs production); test traffic does not consume production allowances.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

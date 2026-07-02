@@ -1,0 +1,473 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Courier API",
+    "version": "2024-01"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{apiKey}}"
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Send", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Send a message.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.courier.com/send",
+            "body": { "type": "json", "data": "{\n  \"message\": {\n    \"to\": { \"user_id\": \"USER_ID\" },\n    \"template\": \"TEMPLATE_ID\",\n    \"data\": {}\n  }\n}" }
+          },
+          "docs": "Dispatches a single notification to one or more recipients across channels."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Messages", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List messages.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.courier.com/messages" },
+          "docs": "Fetch the statuses of messages you have previously sent."
+        },
+        {
+          "info": { "name": "Get a message.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/messages/:message_id",
+            "params": [ { "name": "message_id", "value": "", "type": "path", "description": "The message id." } ]
+          },
+          "docs": "Retrieve the status of a single message by id."
+        },
+        {
+          "info": { "name": "Get message content.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/messages/:message_id/content",
+            "params": [ { "name": "message_id", "value": "", "type": "path", "description": "The message id." } ]
+          },
+          "docs": "Retrieve the rendered content of a message."
+        },
+        {
+          "info": { "name": "Get message history.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/messages/:message_id/history",
+            "params": [ { "name": "message_id", "value": "", "type": "path", "description": "The message id." } ]
+          },
+          "docs": "Retrieve delivery and engagement history for a message."
+        },
+        {
+          "info": { "name": "Cancel a message.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.courier.com/messages/:message_id/cancel",
+            "params": [ { "name": "message_id", "value": "", "type": "path", "description": "The message id." } ]
+          },
+          "docs": "Cancel a message that is currently enqueued."
+        },
+        {
+          "info": { "name": "Archive a message.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.courier.com/messages/:message_id/archive",
+            "params": [ { "name": "message_id", "value": "", "type": "path", "description": "The message id." } ]
+          },
+          "docs": "Archive a message."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Lists", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get all lists.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.courier.com/lists" },
+          "docs": "Returns all subscription lists in the workspace."
+        },
+        {
+          "info": { "name": "Get a list.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/lists/:list_id",
+            "params": [ { "name": "list_id", "value": "", "type": "path", "description": "The list id." } ]
+          },
+          "docs": "Get a single list by id."
+        },
+        {
+          "info": { "name": "Create or replace a list.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.courier.com/lists/:list_id",
+            "params": [ { "name": "list_id", "value": "", "type": "path", "description": "The list id." } ],
+            "body": { "type": "json", "data": "{\n  \"name\": \"My List\"\n}" }
+          },
+          "docs": "Create or replace a subscription list."
+        },
+        {
+          "info": { "name": "Delete a list.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.courier.com/lists/:list_id",
+            "params": [ { "name": "list_id", "value": "", "type": "path", "description": "The list id." } ]
+          },
+          "docs": "Delete a subscription list."
+        },
+        {
+          "info": { "name": "Get list subscriptions.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/lists/:list_id/subscriptions",
+            "params": [ { "name": "list_id", "value": "", "type": "path", "description": "The list id." } ]
+          },
+          "docs": "Get the users subscribed to a list."
+        },
+        {
+          "info": { "name": "Subscribe a user to a list.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.courier.com/lists/:list_id/subscriptions/:user_id",
+            "params": [
+              { "name": "list_id", "value": "", "type": "path", "description": "The list id." },
+              { "name": "user_id", "value": "", "type": "path", "description": "The user id." }
+            ]
+          },
+          "docs": "Subscribe a single user to a list."
+        }
+      ]
+    },
+    {
+      "info": { "name": "User Profiles", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get a profile.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/profiles/:user_id",
+            "params": [ { "name": "user_id", "value": "", "type": "path", "description": "The user id." } ]
+          },
+          "docs": "Retrieve a recipient profile."
+        },
+        {
+          "info": { "name": "Create or merge a profile.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.courier.com/profiles/:user_id",
+            "params": [ { "name": "user_id", "value": "", "type": "path", "description": "The user id." } ],
+            "body": { "type": "json", "data": "{\n  \"profile\": { \"email\": \"user@example.com\" }\n}" }
+          },
+          "docs": "Create or merge a recipient profile."
+        },
+        {
+          "info": { "name": "Replace a profile.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.courier.com/profiles/:user_id",
+            "params": [ { "name": "user_id", "value": "", "type": "path", "description": "The user id." } ],
+            "body": { "type": "json", "data": "{\n  \"profile\": { \"email\": \"user@example.com\" }\n}" }
+          },
+          "docs": "Replace a recipient profile."
+        },
+        {
+          "info": { "name": "Delete a profile.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.courier.com/profiles/:user_id",
+            "params": [ { "name": "user_id", "value": "", "type": "path", "description": "The user id." } ]
+          },
+          "docs": "Delete a recipient profile."
+        }
+      ]
+    },
+    {
+      "info": { "name": "User Preferences", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List user preferences.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/users/:user_id/preferences",
+            "params": [ { "name": "user_id", "value": "", "type": "path", "description": "The user id." } ]
+          },
+          "docs": "List a user's notification preferences across topics."
+        },
+        {
+          "info": { "name": "Update a user topic preference.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.courier.com/users/:user_id/preferences/:topic_id",
+            "params": [
+              { "name": "user_id", "value": "", "type": "path", "description": "The user id." },
+              { "name": "topic_id", "value": "", "type": "path", "description": "The subscription topic id." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"topic\": { \"status\": \"OPTED_IN\" }\n}" }
+          },
+          "docs": "Update a user's preference for a subscription topic."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Device Tokens", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List a user's device tokens.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/users/:user_id/tokens",
+            "params": [ { "name": "user_id", "value": "", "type": "path", "description": "The user id." } ]
+          },
+          "docs": "List the push device tokens for a user."
+        },
+        {
+          "info": { "name": "Add or update a device token.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.courier.com/users/:user_id/tokens/:token",
+            "params": [
+              { "name": "user_id", "value": "", "type": "path", "description": "The user id." },
+              { "name": "token", "value": "", "type": "path", "description": "The device token." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"provider_key\": \"firebase-fcm\"\n}" }
+          },
+          "docs": "Add or update a push device token for a user."
+        },
+        {
+          "info": { "name": "Delete a device token.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.courier.com/users/:user_id/tokens/:token",
+            "params": [
+              { "name": "user_id", "value": "", "type": "path", "description": "The user id." },
+              { "name": "token", "value": "", "type": "path", "description": "The device token." }
+            ]
+          },
+          "docs": "Delete a push device token."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Notification Templates", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List notification templates.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.courier.com/notifications" },
+          "docs": "List notification templates designed in the Courier studio."
+        },
+        {
+          "info": { "name": "Get notification content.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/notifications/:notification_id/content",
+            "params": [ { "name": "notification_id", "value": "", "type": "path", "description": "The notification template id." } ]
+          },
+          "docs": "Get the content blocks of a notification template."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Brands", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List brands.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.courier.com/brands" },
+          "docs": "List brands in the workspace."
+        },
+        {
+          "info": { "name": "Create a brand.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.courier.com/brands",
+            "body": { "type": "json", "data": "{\n  \"name\": \"My Brand\"\n}" }
+          },
+          "docs": "Create a brand."
+        },
+        {
+          "info": { "name": "Get a brand.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/brands/:brand_id",
+            "params": [ { "name": "brand_id", "value": "", "type": "path", "description": "The brand id." } ]
+          },
+          "docs": "Get a brand by id."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Automations", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Invoke an ad-hoc automation.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.courier.com/automations/invoke",
+            "body": { "type": "json", "data": "{\n  \"automation\": { \"steps\": [] },\n  \"recipient\": \"USER_ID\"\n}" }
+          },
+          "docs": "Invoke an automation run defined inline."
+        },
+        {
+          "info": { "name": "Invoke an automation template.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.courier.com/automations/:template_id/invoke",
+            "params": [ { "name": "template_id", "value": "", "type": "path", "description": "The automation template id." } ],
+            "body": { "type": "json", "data": "{\n  \"recipient\": \"USER_ID\"\n}" }
+          },
+          "docs": "Invoke a saved automation template by id."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Audiences", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List audiences.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.courier.com/audiences" },
+          "docs": "List dynamic audiences."
+        },
+        {
+          "info": { "name": "Create or update an audience.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.courier.com/audiences/:audience_id",
+            "params": [ { "name": "audience_id", "value": "", "type": "path", "description": "The audience id." } ],
+            "body": { "type": "json", "data": "{\n  \"name\": \"Power Users\",\n  \"filter\": {}\n}" }
+          },
+          "docs": "Create or update an audience defined by profile filters."
+        },
+        {
+          "info": { "name": "List audience members.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/audiences/:audience_id/members",
+            "params": [ { "name": "audience_id", "value": "", "type": "path", "description": "The audience id." } ]
+          },
+          "docs": "List the members currently matching an audience."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Tenants", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List tenants.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.courier.com/tenants" },
+          "docs": "List tenants for multi-tenant applications."
+        },
+        {
+          "info": { "name": "Create or replace a tenant.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.courier.com/tenants/:tenant_id",
+            "params": [ { "name": "tenant_id", "value": "", "type": "path", "description": "The tenant id." } ],
+            "body": { "type": "json", "data": "{\n  \"name\": \"Acme Inc\"\n}" }
+          },
+          "docs": "Create or replace a tenant."
+        },
+        {
+          "info": { "name": "List users in a tenant.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/tenants/:tenant_id/users",
+            "params": [ { "name": "tenant_id", "value": "", "type": "path", "description": "The tenant id." } ]
+          },
+          "docs": "List the users associated with a tenant."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Bulk", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a bulk job.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.courier.com/bulk",
+            "body": { "type": "json", "data": "{\n  \"message\": { \"template\": \"TEMPLATE_ID\" }\n}" }
+          },
+          "docs": "Create a bulk job for a one-to-many send."
+        },
+        {
+          "info": { "name": "Add users to a bulk job.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.courier.com/bulk/:job_id",
+            "params": [ { "name": "job_id", "value": "", "type": "path", "description": "The bulk job id." } ],
+            "body": { "type": "json", "data": "{\n  \"users\": []\n}" }
+          },
+          "docs": "Add recipients to a bulk job."
+        },
+        {
+          "info": { "name": "Run a bulk job.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.courier.com/bulk/:job_id/run",
+            "params": [ { "name": "job_id", "value": "", "type": "path", "description": "The bulk job id." } ]
+          },
+          "docs": "Start running a bulk job."
+        },
+        {
+          "info": { "name": "Get a bulk job.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/bulk/:job_id",
+            "params": [ { "name": "job_id", "value": "", "type": "path", "description": "The bulk job id." } ]
+          },
+          "docs": "Get the status of a bulk job."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Audit Events", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List audit events.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.courier.com/audit-events" },
+          "docs": "List workspace audit events."
+        },
+        {
+          "info": { "name": "Get an audit event.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/audit-events/:audit_event_id",
+            "params": [ { "name": "audit_event_id", "value": "", "type": "path", "description": "The audit event id." } ]
+          },
+          "docs": "Get a single audit event by id."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Translations", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get translations for a locale.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.courier.com/translations/:domain/:locale",
+            "params": [
+              { "name": "domain", "value": "", "type": "path", "description": "The translation domain." },
+              { "name": "locale", "value": "", "type": "path", "description": "The locale, e.g. en-US." }
+            ]
+          },
+          "docs": "Retrieve the translation (.po) content for a domain and locale."
+        },
+        {
+          "info": { "name": "Update translations for a locale.", "type": "http" },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.courier.com/translations/:domain/:locale",
+            "params": [
+              { "name": "domain", "value": "", "type": "path", "description": "The translation domain." },
+              { "name": "locale", "value": "", "type": "path", "description": "The locale, e.g. en-US." }
+            ],
+            "body": { "type": "text", "data": "msgid \"hello\"\nmsgstr \"hola\"" }
+          },
+          "docs": "Update the translation content for a domain and locale."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

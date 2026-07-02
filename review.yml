@@ -1,0 +1,159 @@
+aid: courier-com
+name: Courier
+review:
+  question: Does Courier expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-02'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. Courier's public, documented API is the
+    REST API at https://api.courier.com (Send, Messages, Lists, Profiles,
+    Preferences, Device Tokens, Notification Templates, Brands, Automations,
+    Audiences, Tenants, Bulk, Audit Events, Translations) - all request/response
+    over HTTPS. Courier's documented server-push / event mechanism for delivery
+    and engagement events is outbound webhooks (HMAC-SHA256 signed HTTP POSTs),
+    not a WebSocket. The Courier Inbox product does maintain a realtime WebSocket
+    connection, but it is an internal transport established and abstracted by the
+    Courier client SDKs (e.g. inbox.listenForUpdates()); Courier does not publish
+    a WebSocket endpoint URL, a message/frame protocol, or a schema for
+    developers to program against directly, so there is no documented public
+    WebSocket API surface to model in AsyncAPI.
+findings:
+  summary: |
+    Courier does not publish a documented public WebSocket API. Courier is
+    notification infrastructure whose public developer surface is a REST API
+    (base https://api.courier.com), authenticated with a Bearer API key
+    (Authorization: Bearer <API_KEY>) and wrapped by official server SDKs
+    (Node, Python, Go, Ruby, PHP, Java) and a CLI. Sending is POST /send; the
+    rest of the platform (messages, lists, profiles, preferences, device tokens,
+    notification templates, brands, automations, audiences, tenants, bulk jobs,
+    audit events, translations) is request/response REST over HTTPS. The
+    documented mechanism for receiving asynchronous message lifecycle and
+    audience events is outbound webhooks - Courier POSTs signed JSON events
+    (message:updated with statuses ENQUEUED, SENT, DELIVERED, OPENED, CLICKED,
+    UNROUTABLE, UNDELIVERABLE; notification:submitted/published; audiences:*) to
+    a URL you configure, secured with an HMAC-SHA256 courier-signature header.
+    The Courier Inbox in-app notification feed uses a realtime WebSocket under
+    the hood, but that connection is opened and managed by the Courier client
+    SDKs and is not documented as a standalone public WebSocket API (no published
+    wss endpoint, frame protocol, or message schema). No public bidirectional
+    ws:// or wss:// API contract is documented as of the review date.
+  inboxRealtime: |
+    The Courier Inbox provides an in-app notification center with realtime
+    updates. Developers integrate it via SDKs (React/Web, iOS, Android,
+    React Native, Angular, Vue) and enable realtime by authenticating and
+    calling inbox.listenForUpdates(), which opens a WebSocket the SDK manages
+    internally. Because Courier documents only the SDK methods - not a WebSocket
+    URL, subprotocol, or message schema - the WebSocket is treated as an internal
+    SDK transport, not a documented public WebSocket API.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.courier.com
+      documented: true
+      note: Primary public API. Bearer API key auth. All request/response over HTTPS.
+    - protocol: Webhook
+      scheme: https
+      documented: true
+      note: >-
+        Outbound webhooks POST signed JSON events (message:updated,
+        notification:submitted/published, audiences:*) to a configured endpoint,
+        secured with an HMAC-SHA256 courier-signature header. Server-to-endpoint
+        HTTP, not WebSocket.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: >-
+        The Courier Inbox SDKs open a realtime WebSocket internally
+        (inbox.listenForUpdates()), but no WebSocket endpoint URL, frame
+        protocol, or message schema is published for direct developer use. No
+        standalone public WebSocket API is documented.
+  endpointsConfirmedRest:
+    - POST   https://api.courier.com/send
+    - GET    https://api.courier.com/messages
+    - GET    https://api.courier.com/messages/{message_id}
+    - GET    https://api.courier.com/messages/{message_id}/content
+    - GET    https://api.courier.com/messages/{message_id}/history
+    - POST   https://api.courier.com/messages/{message_id}/cancel
+    - PUT    https://api.courier.com/messages/{message_id}/archive
+    - GET    https://api.courier.com/lists
+    - GET    https://api.courier.com/lists/{list_id}
+    - PUT    https://api.courier.com/lists/{list_id}
+    - DELETE https://api.courier.com/lists/{list_id}
+    - PUT    https://api.courier.com/lists/{list_id}/restore
+    - GET    https://api.courier.com/lists/{list_id}/subscriptions
+    - PUT    https://api.courier.com/lists/{list_id}/subscriptions
+    - PUT    https://api.courier.com/lists/{list_id}/subscriptions/{user_id}
+    - DELETE https://api.courier.com/lists/{list_id}/subscriptions/{user_id}
+    - GET    https://api.courier.com/profiles/{user_id}
+    - POST   https://api.courier.com/profiles/{user_id}
+    - PUT    https://api.courier.com/profiles/{user_id}
+    - PATCH  https://api.courier.com/profiles/{user_id}
+    - DELETE https://api.courier.com/profiles/{user_id}
+    - GET    https://api.courier.com/profiles/{user_id}/lists
+    - GET    https://api.courier.com/users/{user_id}/preferences
+    - GET    https://api.courier.com/users/{user_id}/preferences/{topic_id}
+    - PUT    https://api.courier.com/users/{user_id}/preferences/{topic_id}
+    - GET    https://api.courier.com/users/{user_id}/tokens
+    - GET    https://api.courier.com/users/{user_id}/tokens/{token}
+    - PUT    https://api.courier.com/users/{user_id}/tokens/{token}
+    - PATCH  https://api.courier.com/users/{user_id}/tokens/{token}
+    - DELETE https://api.courier.com/users/{user_id}/tokens/{token}
+    - GET    https://api.courier.com/notifications
+    - GET    https://api.courier.com/notifications/{notification_id}/content
+    - POST   https://api.courier.com/notifications/{notification_id}/content
+    - PUT    https://api.courier.com/notifications/{notification_id}/draft/submit
+    - GET    https://api.courier.com/brands
+    - POST   https://api.courier.com/brands
+    - GET    https://api.courier.com/brands/{brand_id}
+    - PUT    https://api.courier.com/brands/{brand_id}
+    - DELETE https://api.courier.com/brands/{brand_id}
+    - POST   https://api.courier.com/automations/invoke
+    - POST   https://api.courier.com/automations/{template_id}/invoke
+    - GET    https://api.courier.com/audiences
+    - GET    https://api.courier.com/audiences/{audience_id}
+    - PUT    https://api.courier.com/audiences/{audience_id}
+    - DELETE https://api.courier.com/audiences/{audience_id}
+    - GET    https://api.courier.com/audiences/{audience_id}/members
+    - GET    https://api.courier.com/tenants
+    - GET    https://api.courier.com/tenants/{tenant_id}
+    - PUT    https://api.courier.com/tenants/{tenant_id}
+    - DELETE https://api.courier.com/tenants/{tenant_id}
+    - GET    https://api.courier.com/tenants/{tenant_id}/users
+    - POST   https://api.courier.com/bulk
+    - GET    https://api.courier.com/bulk/{job_id}
+    - POST   https://api.courier.com/bulk/{job_id}
+    - POST   https://api.courier.com/bulk/{job_id}/run
+    - GET    https://api.courier.com/bulk/{job_id}/users
+    - GET    https://api.courier.com/audit-events
+    - GET    https://api.courier.com/audit-events/{audit_event_id}
+    - GET    https://api.courier.com/translations/{domain}/{locale}
+    - PUT    https://api.courier.com/translations/{domain}/{locale}
+sources:
+  - url: https://www.courier.com/docs/reference
+    type: APIReference
+    note: REST API reference; base https://api.courier.com; Bearer API key auth. No WebSocket API listed.
+  - url: https://www.courier.com/docs/reference/get-started
+    type: Documentation
+    note: Authentication via Authorization Bearer API key; overview of resource categories.
+  - url: https://www.courier.com/docs/platform/workspaces/outbound-webhooks
+    type: Documentation
+    note: Documented event mechanism - outbound webhooks with HMAC-SHA256 courier-signature; message:updated and audiences:* events. Not WebSocket.
+  - url: https://www.courier.com/docs/sdk-libraries/courier-react-web
+    type: Documentation
+    note: Inbox realtime via SDK inbox.listenForUpdates(); WebSocket is opened internally by the SDK, no public endpoint/protocol documented.
+  - url: https://github.com/trycourier
+    type: SourceCode
+    note: Official SDKs (Node, Python, Go, Ruby, PHP, Java) and CLI wrapping the REST API.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No documented public WebSocket API surface exists. Courier's public API is
+    request/response REST (base https://api.courier.com), and its documented
+    asynchronous event mechanism is outbound webhooks (signed HTTP POSTs), which
+    are server-to-endpoint HTTP rather than WebSocket. The Courier Inbox uses a
+    realtime WebSocket, but only as an internal transport managed by the client
+    SDKs with no published endpoint, protocol, or schema - so there is nothing to
+    model as a public AsyncAPI WebSocket document. No AsyncAPI file was created.

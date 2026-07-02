@@ -1,0 +1,490 @@
+{
+  "info": {
+    "name": "Courier API",
+    "description": "Courier is notification infrastructure that orchestrates transactional and product messaging across email, SMS, push, chat, and an in-app inbox from a single REST API. Base URL: https://api.courier.com. All requests are authenticated with a Bearer API key (Authorization: Bearer <API_KEY>).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{apiKey}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.courier.com", "type": "string" },
+    { "key": "apiKey", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Send",
+      "item": [
+        {
+          "name": "Send a message",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"message\": {\n    \"to\": { \"user_id\": \"USER_ID\" },\n    \"template\": \"TEMPLATE_ID\",\n    \"data\": {}\n  }\n}" },
+            "url": { "raw": "{{baseUrl}}/send", "host": ["{{baseUrl}}"], "path": ["send"] },
+            "description": "Dispatches a single notification to one or more recipients across channels."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Messages",
+      "item": [
+        {
+          "name": "List messages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/messages", "host": ["{{baseUrl}}"], "path": ["messages"] },
+            "description": "Fetch the statuses of messages you have previously sent."
+          }
+        },
+        {
+          "name": "Get a message",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/messages/:message_id", "host": ["{{baseUrl}}"], "path": ["messages", ":message_id"], "variable": [{ "key": "message_id", "value": "" }] },
+            "description": "Retrieve the status of a single message by id."
+          }
+        },
+        {
+          "name": "Get message content",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/messages/:message_id/content", "host": ["{{baseUrl}}"], "path": ["messages", ":message_id", "content"], "variable": [{ "key": "message_id", "value": "" }] },
+            "description": "Retrieve the rendered content of a message."
+          }
+        },
+        {
+          "name": "Get message history",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/messages/:message_id/history", "host": ["{{baseUrl}}"], "path": ["messages", ":message_id", "history"], "variable": [{ "key": "message_id", "value": "" }] },
+            "description": "Retrieve delivery and engagement history for a message."
+          }
+        },
+        {
+          "name": "Cancel a message",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/messages/:message_id/cancel", "host": ["{{baseUrl}}"], "path": ["messages", ":message_id", "cancel"], "variable": [{ "key": "message_id", "value": "" }] },
+            "description": "Cancel a message that is currently enqueued."
+          }
+        },
+        {
+          "name": "Archive a message",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/messages/:message_id/archive", "host": ["{{baseUrl}}"], "path": ["messages", ":message_id", "archive"], "variable": [{ "key": "message_id", "value": "" }] },
+            "description": "Archive a message."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lists",
+      "item": [
+        {
+          "name": "Get all lists",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/lists", "host": ["{{baseUrl}}"], "path": ["lists"] },
+            "description": "Returns all subscription lists in the workspace."
+          }
+        },
+        {
+          "name": "Get a list",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/lists/:list_id", "host": ["{{baseUrl}}"], "path": ["lists", ":list_id"], "variable": [{ "key": "list_id", "value": "" }] },
+            "description": "Get a single list by id."
+          }
+        },
+        {
+          "name": "Create or replace a list",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"My List\"\n}" },
+            "url": { "raw": "{{baseUrl}}/lists/:list_id", "host": ["{{baseUrl}}"], "path": ["lists", ":list_id"], "variable": [{ "key": "list_id", "value": "" }] },
+            "description": "Create or replace a subscription list."
+          }
+        },
+        {
+          "name": "Delete a list",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/lists/:list_id", "host": ["{{baseUrl}}"], "path": ["lists", ":list_id"], "variable": [{ "key": "list_id", "value": "" }] },
+            "description": "Delete a subscription list."
+          }
+        },
+        {
+          "name": "Get list subscriptions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/lists/:list_id/subscriptions", "host": ["{{baseUrl}}"], "path": ["lists", ":list_id", "subscriptions"], "variable": [{ "key": "list_id", "value": "" }] },
+            "description": "Get the users subscribed to a list."
+          }
+        },
+        {
+          "name": "Subscribe a user to a list",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/lists/:list_id/subscriptions/:user_id", "host": ["{{baseUrl}}"], "path": ["lists", ":list_id", "subscriptions", ":user_id"], "variable": [{ "key": "list_id", "value": "" }, { "key": "user_id", "value": "" }] },
+            "description": "Subscribe a single user to a list."
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Profiles",
+      "item": [
+        {
+          "name": "Get a profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/profiles/:user_id", "host": ["{{baseUrl}}"], "path": ["profiles", ":user_id"], "variable": [{ "key": "user_id", "value": "" }] },
+            "description": "Retrieve a recipient profile."
+          }
+        },
+        {
+          "name": "Create or merge a profile",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"profile\": { \"email\": \"user@example.com\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/profiles/:user_id", "host": ["{{baseUrl}}"], "path": ["profiles", ":user_id"], "variable": [{ "key": "user_id", "value": "" }] },
+            "description": "Create or merge a recipient profile."
+          }
+        },
+        {
+          "name": "Replace a profile",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"profile\": { \"email\": \"user@example.com\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/profiles/:user_id", "host": ["{{baseUrl}}"], "path": ["profiles", ":user_id"], "variable": [{ "key": "user_id", "value": "" }] },
+            "description": "Replace a recipient profile."
+          }
+        },
+        {
+          "name": "Delete a profile",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/profiles/:user_id", "host": ["{{baseUrl}}"], "path": ["profiles", ":user_id"], "variable": [{ "key": "user_id", "value": "" }] },
+            "description": "Delete a recipient profile."
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Preferences",
+      "item": [
+        {
+          "name": "List user preferences",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/users/:user_id/preferences", "host": ["{{baseUrl}}"], "path": ["users", ":user_id", "preferences"], "variable": [{ "key": "user_id", "value": "" }] },
+            "description": "List a user's notification preferences across topics."
+          }
+        },
+        {
+          "name": "Update a user topic preference",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"topic\": { \"status\": \"OPTED_IN\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/users/:user_id/preferences/:topic_id", "host": ["{{baseUrl}}"], "path": ["users", ":user_id", "preferences", ":topic_id"], "variable": [{ "key": "user_id", "value": "" }, { "key": "topic_id", "value": "" }] },
+            "description": "Update a user's preference for a subscription topic."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device Tokens",
+      "item": [
+        {
+          "name": "List a user's device tokens",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/users/:user_id/tokens", "host": ["{{baseUrl}}"], "path": ["users", ":user_id", "tokens"], "variable": [{ "key": "user_id", "value": "" }] },
+            "description": "List the push device tokens for a user."
+          }
+        },
+        {
+          "name": "Add or update a device token",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"provider_key\": \"firebase-fcm\"\n}" },
+            "url": { "raw": "{{baseUrl}}/users/:user_id/tokens/:token", "host": ["{{baseUrl}}"], "path": ["users", ":user_id", "tokens", ":token"], "variable": [{ "key": "user_id", "value": "" }, { "key": "token", "value": "" }] },
+            "description": "Add or update a push device token for a user."
+          }
+        },
+        {
+          "name": "Delete a device token",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/users/:user_id/tokens/:token", "host": ["{{baseUrl}}"], "path": ["users", ":user_id", "tokens", ":token"], "variable": [{ "key": "user_id", "value": "" }, { "key": "token", "value": "" }] },
+            "description": "Delete a push device token."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notification Templates",
+      "item": [
+        {
+          "name": "List notification templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/notifications", "host": ["{{baseUrl}}"], "path": ["notifications"] },
+            "description": "List notification templates designed in the Courier studio."
+          }
+        },
+        {
+          "name": "Get notification content",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/notifications/:notification_id/content", "host": ["{{baseUrl}}"], "path": ["notifications", ":notification_id", "content"], "variable": [{ "key": "notification_id", "value": "" }] },
+            "description": "Get the content blocks of a notification template."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Brands",
+      "item": [
+        {
+          "name": "List brands",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/brands", "host": ["{{baseUrl}}"], "path": ["brands"] },
+            "description": "List brands in the workspace."
+          }
+        },
+        {
+          "name": "Create a brand",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"My Brand\"\n}" },
+            "url": { "raw": "{{baseUrl}}/brands", "host": ["{{baseUrl}}"], "path": ["brands"] },
+            "description": "Create a brand."
+          }
+        },
+        {
+          "name": "Get a brand",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/brands/:brand_id", "host": ["{{baseUrl}}"], "path": ["brands", ":brand_id"], "variable": [{ "key": "brand_id", "value": "" }] },
+            "description": "Get a brand by id."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Automations",
+      "item": [
+        {
+          "name": "Invoke an ad-hoc automation",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"automation\": { \"steps\": [] },\n  \"recipient\": \"USER_ID\"\n}" },
+            "url": { "raw": "{{baseUrl}}/automations/invoke", "host": ["{{baseUrl}}"], "path": ["automations", "invoke"] },
+            "description": "Invoke an automation run defined inline."
+          }
+        },
+        {
+          "name": "Invoke an automation template",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"recipient\": \"USER_ID\"\n}" },
+            "url": { "raw": "{{baseUrl}}/automations/:template_id/invoke", "host": ["{{baseUrl}}"], "path": ["automations", ":template_id", "invoke"], "variable": [{ "key": "template_id", "value": "" }] },
+            "description": "Invoke a saved automation template by id."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Audiences",
+      "item": [
+        {
+          "name": "List audiences",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/audiences", "host": ["{{baseUrl}}"], "path": ["audiences"] },
+            "description": "List dynamic audiences."
+          }
+        },
+        {
+          "name": "Create or update an audience",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Power Users\",\n  \"filter\": {}\n}" },
+            "url": { "raw": "{{baseUrl}}/audiences/:audience_id", "host": ["{{baseUrl}}"], "path": ["audiences", ":audience_id"], "variable": [{ "key": "audience_id", "value": "" }] },
+            "description": "Create or update an audience defined by profile filters."
+          }
+        },
+        {
+          "name": "List audience members",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/audiences/:audience_id/members", "host": ["{{baseUrl}}"], "path": ["audiences", ":audience_id", "members"], "variable": [{ "key": "audience_id", "value": "" }] },
+            "description": "List the members currently matching an audience."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tenants",
+      "item": [
+        {
+          "name": "List tenants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/tenants", "host": ["{{baseUrl}}"], "path": ["tenants"] },
+            "description": "List tenants for multi-tenant applications."
+          }
+        },
+        {
+          "name": "Create or replace a tenant",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Acme Inc\"\n}" },
+            "url": { "raw": "{{baseUrl}}/tenants/:tenant_id", "host": ["{{baseUrl}}"], "path": ["tenants", ":tenant_id"], "variable": [{ "key": "tenant_id", "value": "" }] },
+            "description": "Create or replace a tenant."
+          }
+        },
+        {
+          "name": "List users in a tenant",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/tenants/:tenant_id/users", "host": ["{{baseUrl}}"], "path": ["tenants", ":tenant_id", "users"], "variable": [{ "key": "tenant_id", "value": "" }] },
+            "description": "List the users associated with a tenant."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bulk",
+      "item": [
+        {
+          "name": "Create a bulk job",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"message\": { \"template\": \"TEMPLATE_ID\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/bulk", "host": ["{{baseUrl}}"], "path": ["bulk"] },
+            "description": "Create a bulk job for a one-to-many send."
+          }
+        },
+        {
+          "name": "Add users to a bulk job",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"users\": []\n}" },
+            "url": { "raw": "{{baseUrl}}/bulk/:job_id", "host": ["{{baseUrl}}"], "path": ["bulk", ":job_id"], "variable": [{ "key": "job_id", "value": "" }] },
+            "description": "Add recipients to a bulk job."
+          }
+        },
+        {
+          "name": "Run a bulk job",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/bulk/:job_id/run", "host": ["{{baseUrl}}"], "path": ["bulk", ":job_id", "run"], "variable": [{ "key": "job_id", "value": "" }] },
+            "description": "Start running a bulk job."
+          }
+        },
+        {
+          "name": "Get a bulk job",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/bulk/:job_id", "host": ["{{baseUrl}}"], "path": ["bulk", ":job_id"], "variable": [{ "key": "job_id", "value": "" }] },
+            "description": "Get the status of a bulk job."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Audit Events",
+      "item": [
+        {
+          "name": "List audit events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/audit-events", "host": ["{{baseUrl}}"], "path": ["audit-events"] },
+            "description": "List workspace audit events."
+          }
+        },
+        {
+          "name": "Get an audit event",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/audit-events/:audit_event_id", "host": ["{{baseUrl}}"], "path": ["audit-events", ":audit_event_id"], "variable": [{ "key": "audit_event_id", "value": "" }] },
+            "description": "Get a single audit event by id."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Translations",
+      "item": [
+        {
+          "name": "Get translations for a locale",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/translations/:domain/:locale", "host": ["{{baseUrl}}"], "path": ["translations", ":domain", ":locale"], "variable": [{ "key": "domain", "value": "" }, { "key": "locale", "value": "" }] },
+            "description": "Retrieve the translation (.po) content for a domain and locale."
+          }
+        },
+        {
+          "name": "Update translations for a locale",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "text/plain" }],
+            "body": { "mode": "raw", "raw": "msgid \"hello\"\nmsgstr \"hola\"" },
+            "url": { "raw": "{{baseUrl}}/translations/:domain/:locale", "host": ["{{baseUrl}}"], "path": ["translations", ":domain", ":locale"], "variable": [{ "key": "domain", "value": "" }, { "key": "locale", "value": "" }] },
+            "description": "Update the translation content for a domain and locale."
+          }
+        }
+      ]
+    }
+  ]
+}
