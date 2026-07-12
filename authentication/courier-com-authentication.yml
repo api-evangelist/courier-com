@@ -1,0 +1,14 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/courier-com-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: 'Courier API key passed as `Authorization: Bearer <YOUR_API_KEY>`. Keys are found
+    in the Courier settings under API Keys and are environment scoped (test vs production).'
+  sources:
+  - openapi/courier-com-openapi.yml

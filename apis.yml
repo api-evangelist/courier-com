@@ -323,6 +323,12 @@ apis:
     translation (.po) content for a given domain and locale so notifications render
     in the recipient's language.
 common:
+- type: TrustCenter
+  url: security/courier-com-trust-center.yml
+- type: DomainSecurity
+  url: security/courier-com-domain-security.yml
+- type: Authentication
+  url: authentication/courier-com-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/trycourier
 - type: LinkedIn
@@ -337,6 +343,8 @@ common:
   url: rate-limits/courier-com-rate-limits.yml
 - type: FinOps
   url: finops/courier-com-finops.yml
+- url: https://www.courier.com/blog/feed
+  type: Blog
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
