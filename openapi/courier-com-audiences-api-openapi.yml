@@ -1,0 +1,161 @@
+openapi: 3.0.3
+info:
+  title: Courier Audiences API
+  description: 'Courier is notification infrastructure that orchestrates transactional and product messaging across email, SMS, push, chat, and an in-app inbox from a single REST API. This document models the primary public endpoints under the base URL https://api.courier.com: sending notifications (Send), inspecting sent messages, managing lists, user profiles, preferences, device tokens, notification templates, brands, automations, audiences, tenants, bulk jobs, audit events, and translations. All requests are authenticated with a Bearer API key. Endpoint paths are grounded in Courier''s published API reference; request and response bodies are modeled and simplified.'
+  version: 2024-01
+  contact:
+    name: Courier
+    url: https://www.courier.com
+  x-endpoint-confidence: Paths and methods are grounded in the Courier API reference (https://www.courier.com/docs/reference). Schemas are modeled, not exhaustive.
+servers:
+- url: https://api.courier.com
+  description: Courier production API
+security:
+- bearerAuth: []
+tags:
+- name: Audiences
+  description: Dynamic audiences defined by profile filters.
+paths:
+  /audiences:
+    get:
+      operationId: listAudiences
+      tags:
+      - Audiences
+      summary: List audiences
+      responses:
+        '200':
+          description: A paged list of audiences.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/Paging'
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Audience'
+  /audiences/{audience_id}:
+    parameters:
+    - name: audience_id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getAudience
+      tags:
+      - Audiences
+      summary: Get an audience
+      responses:
+        '200':
+          description: The requested audience.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Audience'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: putAudience
+      tags:
+      - Audiences
+      summary: Create or update an audience
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudienceInput'
+      responses:
+        '200':
+          description: The created or updated audience.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Audience'
+    delete:
+      operationId: deleteAudience
+      tags:
+      - Audiences
+      summary: Delete an audience
+      responses:
+        '204':
+          description: The audience was deleted.
+  /audiences/{audience_id}/members:
+    parameters:
+    - name: audience_id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: listAudienceMembers
+      tags:
+      - Audiences
+      summary: List audience members
+      responses:
+        '200':
+          description: The members currently matching the audience.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/Paging'
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+components:
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        type:
+          type: string
+    AudienceInput:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        filter:
+          type: object
+          additionalProperties: true
+    Audience:
+      allOf:
+      - $ref: '#/components/schemas/AudienceInput'
+      - type: object
+        properties:
+          id:
+            type: string
+          created_at:
+            type: string
+          updated_at:
+            type: string
+    Paging:
+      type: object
+      properties:
+        cursor:
+          type: string
+        more:
+          type: boolean
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Courier API key passed as `Authorization: Bearer <YOUR_API_KEY>`. Keys are found in the Courier settings under API Keys and are environment scoped (test vs production).'

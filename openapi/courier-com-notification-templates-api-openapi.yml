@@ -1,0 +1,114 @@
+openapi: 3.0.3
+info:
+  title: Courier Audiences Notification Templates API
+  description: 'Courier is notification infrastructure that orchestrates transactional and product messaging across email, SMS, push, chat, and an in-app inbox from a single REST API. This document models the primary public endpoints under the base URL https://api.courier.com: sending notifications (Send), inspecting sent messages, managing lists, user profiles, preferences, device tokens, notification templates, brands, automations, audiences, tenants, bulk jobs, audit events, and translations. All requests are authenticated with a Bearer API key. Endpoint paths are grounded in Courier''s published API reference; request and response bodies are modeled and simplified.'
+  version: 2024-01
+  contact:
+    name: Courier
+    url: https://www.courier.com
+  x-endpoint-confidence: Paths and methods are grounded in the Courier API reference (https://www.courier.com/docs/reference). Schemas are modeled, not exhaustive.
+servers:
+- url: https://api.courier.com
+  description: Courier production API
+security:
+- bearerAuth: []
+tags:
+- name: Notification Templates
+  description: Notification templates designed in the Courier studio.
+paths:
+  /notifications:
+    get:
+      operationId: listNotifications
+      tags:
+      - Notification Templates
+      summary: List notification templates
+      responses:
+        '200':
+          description: A paged list of notification templates.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/Paging'
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Notification'
+  /notifications/{notification_id}/content:
+    parameters:
+    - name: notification_id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getNotificationContent
+      tags:
+      - Notification Templates
+      summary: Get notification content
+      responses:
+        '200':
+          description: The template content blocks.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+    post:
+      operationId: updateNotificationContent
+      tags:
+      - Notification Templates
+      summary: Update notification content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '204':
+          description: The content was updated.
+  /notifications/{notification_id}/draft/submit:
+    parameters:
+    - name: notification_id
+      in: path
+      required: true
+      schema:
+        type: string
+    put:
+      operationId: submitNotificationDraft
+      tags:
+      - Notification Templates
+      summary: Submit a notification draft for publishing
+      responses:
+        '204':
+          description: The draft was submitted.
+components:
+  schemas:
+    Paging:
+      type: object
+      properties:
+        cursor:
+          type: string
+        more:
+          type: boolean
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        topic_id:
+          type: string
+        tags:
+          type: object
+          additionalProperties: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Courier API key passed as `Authorization: Bearer <YOUR_API_KEY>`. Keys are found in the Courier settings under API Keys and are environment scoped (test vs production).'

@@ -1,0 +1,105 @@
+openapi: 3.0.3
+info:
+  title: Courier Audiences User Preferences API
+  description: 'Courier is notification infrastructure that orchestrates transactional and product messaging across email, SMS, push, chat, and an in-app inbox from a single REST API. This document models the primary public endpoints under the base URL https://api.courier.com: sending notifications (Send), inspecting sent messages, managing lists, user profiles, preferences, device tokens, notification templates, brands, automations, audiences, tenants, bulk jobs, audit events, and translations. All requests are authenticated with a Bearer API key. Endpoint paths are grounded in Courier''s published API reference; request and response bodies are modeled and simplified.'
+  version: 2024-01
+  contact:
+    name: Courier
+    url: https://www.courier.com
+  x-endpoint-confidence: Paths and methods are grounded in the Courier API reference (https://www.courier.com/docs/reference). Schemas are modeled, not exhaustive.
+servers:
+- url: https://api.courier.com
+  description: Courier production API
+security:
+- bearerAuth: []
+tags:
+- name: User Preferences
+  description: Per-user, per-topic notification preferences.
+paths:
+  /users/{user_id}/preferences:
+    parameters:
+    - $ref: '#/components/parameters/UserId'
+    get:
+      operationId: listUserPreferences
+      tags:
+      - User Preferences
+      summary: List user preferences
+      description: List a user's notification preferences across subscription topics.
+      responses:
+        '200':
+          description: The user's topic preferences.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TopicPreference'
+  /users/{user_id}/preferences/{topic_id}:
+    parameters:
+    - $ref: '#/components/parameters/UserId'
+    - name: topic_id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getUserTopicPreference
+      tags:
+      - User Preferences
+      summary: Get a user topic preference
+      responses:
+        '200':
+          description: The user's preference for the topic.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicPreference'
+    put:
+      operationId: updateUserTopicPreference
+      tags:
+      - User Preferences
+      summary: Update a user topic preference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopicPreference'
+      responses:
+        '204':
+          description: The preference was updated.
+components:
+  parameters:
+    UserId:
+      name: user_id
+      in: path
+      required: true
+      description: Your application's user id for the recipient.
+      schema:
+        type: string
+  schemas:
+    TopicPreference:
+      type: object
+      properties:
+        topic_id:
+          type: string
+        status:
+          type: string
+          enum:
+          - OPTED_IN
+          - OPTED_OUT
+          - REQUIRED
+        has_custom_routing:
+          type: boolean
+        custom_routing:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Courier API key passed as `Authorization: Bearer <YOUR_API_KEY>`. Keys are found in the Courier settings under API Keys and are environment scoped (test vs production).'

@@ -1,0 +1,229 @@
+openapi: 3.0.3
+info:
+  title: Courier Audiences Lists API
+  description: 'Courier is notification infrastructure that orchestrates transactional and product messaging across email, SMS, push, chat, and an in-app inbox from a single REST API. This document models the primary public endpoints under the base URL https://api.courier.com: sending notifications (Send), inspecting sent messages, managing lists, user profiles, preferences, device tokens, notification templates, brands, automations, audiences, tenants, bulk jobs, audit events, and translations. All requests are authenticated with a Bearer API key. Endpoint paths are grounded in Courier''s published API reference; request and response bodies are modeled and simplified.'
+  version: 2024-01
+  contact:
+    name: Courier
+    url: https://www.courier.com
+  x-endpoint-confidence: Paths and methods are grounded in the Courier API reference (https://www.courier.com/docs/reference). Schemas are modeled, not exhaustive.
+servers:
+- url: https://api.courier.com
+  description: Courier production API
+security:
+- bearerAuth: []
+tags:
+- name: Lists
+  description: Subscription lists and their subscribers.
+paths:
+  /lists:
+    get:
+      operationId: listLists
+      tags:
+      - Lists
+      summary: Get all lists
+      description: Returns all subscription lists in the workspace, paginated.
+      parameters:
+      - name: cursor
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A paged list of lists.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/Paging'
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/List'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /lists/{list_id}:
+    parameters:
+    - $ref: '#/components/parameters/ListId'
+    get:
+      operationId: getList
+      tags:
+      - Lists
+      summary: Get a list
+      responses:
+        '200':
+          description: The requested list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: putList
+      tags:
+      - Lists
+      summary: Create or replace a list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListInput'
+      responses:
+        '200':
+          description: The created or replaced list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+    delete:
+      operationId: deleteList
+      tags:
+      - Lists
+      summary: Delete a list
+      responses:
+        '204':
+          description: The list was deleted.
+  /lists/{list_id}/restore:
+    parameters:
+    - $ref: '#/components/parameters/ListId'
+    put:
+      operationId: restoreList
+      tags:
+      - Lists
+      summary: Restore a deleted list
+      responses:
+        '204':
+          description: The list was restored.
+  /lists/{list_id}/subscriptions:
+    parameters:
+    - $ref: '#/components/parameters/ListId'
+    get:
+      operationId: getListSubscriptions
+      tags:
+      - Lists
+      summary: Get list subscriptions
+      responses:
+        '200':
+          description: The users subscribed to the list.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/Paging'
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+    put:
+      operationId: subscribeUsersToList
+      tags:
+      - Lists
+      summary: Subscribe multiple users to a list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recipients:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+      responses:
+        '204':
+          description: The users were subscribed.
+  /lists/{list_id}/subscriptions/{user_id}:
+    parameters:
+    - $ref: '#/components/parameters/ListId'
+    - $ref: '#/components/parameters/UserId'
+    put:
+      operationId: subscribeUserToList
+      tags:
+      - Lists
+      summary: Subscribe a user to a list
+      responses:
+        '204':
+          description: The user was subscribed.
+    delete:
+      operationId: unsubscribeUserFromList
+      tags:
+      - Lists
+      summary: Unsubscribe a user from a list
+      responses:
+        '204':
+          description: The user was unsubscribed.
+components:
+  schemas:
+    List:
+      allOf:
+      - $ref: '#/components/schemas/ListInput'
+      - type: object
+        properties:
+          id:
+            type: string
+          created:
+            type: integer
+          updated:
+            type: integer
+    ListInput:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        type:
+          type: string
+    Paging:
+      type: object
+      properties:
+        cursor:
+          type: string
+        more:
+          type: boolean
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    ListId:
+      name: list_id
+      in: path
+      required: true
+      schema:
+        type: string
+    UserId:
+      name: user_id
+      in: path
+      required: true
+      description: Your application's user id for the recipient.
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Courier API key passed as `Authorization: Bearer <YOUR_API_KEY>`. Keys are found in the Courier settings under API Keys and are environment scoped (test vs production).'

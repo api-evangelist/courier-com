@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title: Courier Audiences Translations API
+  description: 'Courier is notification infrastructure that orchestrates transactional and product messaging across email, SMS, push, chat, and an in-app inbox from a single REST API. This document models the primary public endpoints under the base URL https://api.courier.com: sending notifications (Send), inspecting sent messages, managing lists, user profiles, preferences, device tokens, notification templates, brands, automations, audiences, tenants, bulk jobs, audit events, and translations. All requests are authenticated with a Bearer API key. Endpoint paths are grounded in Courier''s published API reference; request and response bodies are modeled and simplified.'
+  version: 2024-01
+  contact:
+    name: Courier
+    url: https://www.courier.com
+  x-endpoint-confidence: Paths and methods are grounded in the Courier API reference (https://www.courier.com/docs/reference). Schemas are modeled, not exhaustive.
+servers:
+- url: https://api.courier.com
+  description: Courier production API
+security:
+- bearerAuth: []
+tags:
+- name: Translations
+  description: Localization strings per domain and locale.
+paths:
+  /translations/{domain}/{locale}:
+    parameters:
+    - name: domain
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: locale
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getTranslation
+      tags:
+      - Translations
+      summary: Get translations for a locale
+      description: Retrieve the translation (.po) content for a domain and locale.
+      responses:
+        '200':
+          description: The translation content.
+          content:
+            text/plain:
+              schema:
+                type: string
+    put:
+      operationId: updateTranslation
+      tags:
+      - Translations
+      summary: Update translations for a locale
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+      responses:
+        '204':
+          description: The translation was updated.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Courier API key passed as `Authorization: Bearer <YOUR_API_KEY>`. Keys are found in the Courier settings under API Keys and are environment scoped (test vs production).'

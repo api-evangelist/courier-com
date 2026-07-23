@@ -1,0 +1,224 @@
+openapi: 3.0.3
+info:
+  title: Courier Audiences Messages API
+  description: 'Courier is notification infrastructure that orchestrates transactional and product messaging across email, SMS, push, chat, and an in-app inbox from a single REST API. This document models the primary public endpoints under the base URL https://api.courier.com: sending notifications (Send), inspecting sent messages, managing lists, user profiles, preferences, device tokens, notification templates, brands, automations, audiences, tenants, bulk jobs, audit events, and translations. All requests are authenticated with a Bearer API key. Endpoint paths are grounded in Courier''s published API reference; request and response bodies are modeled and simplified.'
+  version: 2024-01
+  contact:
+    name: Courier
+    url: https://www.courier.com
+  x-endpoint-confidence: Paths and methods are grounded in the Courier API reference (https://www.courier.com/docs/reference). Schemas are modeled, not exhaustive.
+servers:
+- url: https://api.courier.com
+  description: Courier production API
+security:
+- bearerAuth: []
+tags:
+- name: Messages
+  description: Inspect, track, cancel, and archive sent messages.
+paths:
+  /messages:
+    get:
+      operationId: listMessages
+      tags:
+      - Messages
+      summary: List messages
+      description: Fetch the statuses of messages you have previously sent.
+      parameters:
+      - name: cursor
+        in: query
+        schema:
+          type: string
+      - name: status
+        in: query
+        schema:
+          type: string
+      - name: recipient
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A paged list of messages.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/Paging'
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /messages/{message_id}:
+    parameters:
+    - $ref: '#/components/parameters/MessageId'
+    get:
+      operationId: getMessage
+      tags:
+      - Messages
+      summary: Get a message
+      description: Retrieve the status of a single message by id.
+      responses:
+        '200':
+          description: The requested message.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /messages/{message_id}/content:
+    parameters:
+    - $ref: '#/components/parameters/MessageId'
+    get:
+      operationId: getMessageContent
+      tags:
+      - Messages
+      summary: Get message content
+      description: Retrieve the rendered content of a message as delivered to each channel.
+      responses:
+        '200':
+          description: The rendered message content.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /messages/{message_id}/history:
+    parameters:
+    - $ref: '#/components/parameters/MessageId'
+    get:
+      operationId: getMessageHistory
+      tags:
+      - Messages
+      summary: Get message history
+      description: Retrieve the delivery and engagement history for a message (ENQUEUED, SENT, DELIVERED, OPENED, CLICKED, UNDELIVERABLE, etc.).
+      responses:
+        '200':
+          description: The message history events.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /messages/{message_id}/cancel:
+    parameters:
+    - $ref: '#/components/parameters/MessageId'
+    post:
+      operationId: cancelMessage
+      tags:
+      - Messages
+      summary: Cancel a message
+      description: Cancel a message that is currently enqueued and not yet delivered.
+      responses:
+        '200':
+          description: The cancelled message.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /messages/{message_id}/archive:
+    parameters:
+    - $ref: '#/components/parameters/MessageId'
+    put:
+      operationId: archiveMessage
+      tags:
+      - Messages
+      summary: Archive a message
+      description: Archive a message so it no longer appears in the default message list.
+      responses:
+        '204':
+          description: The message was archived.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        type:
+          type: string
+    Paging:
+      type: object
+      properties:
+        cursor:
+          type: string
+        more:
+          type: boolean
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - ENQUEUED
+          - SENT
+          - DELIVERED
+          - OPENED
+          - CLICKED
+          - UNMAPPED
+          - UNROUTABLE
+          - UNDELIVERABLE
+          - CANCELED
+        enqueued:
+          type: integer
+        sent:
+          type: integer
+        delivered:
+          type: integer
+        opened:
+          type: integer
+        clicked:
+          type: integer
+        recipient:
+          type: string
+        notification:
+          type: object
+          additionalProperties: true
+  parameters:
+    MessageId:
+      name: message_id
+      in: path
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Courier API key passed as `Authorization: Bearer <YOUR_API_KEY>`. Keys are found in the Courier settings under API Keys and are environment scoped (test vs production).'

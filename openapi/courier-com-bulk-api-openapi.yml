@@ -1,0 +1,140 @@
+openapi: 3.0.3
+info:
+  title: Courier Audiences Bulk API
+  description: 'Courier is notification infrastructure that orchestrates transactional and product messaging across email, SMS, push, chat, and an in-app inbox from a single REST API. This document models the primary public endpoints under the base URL https://api.courier.com: sending notifications (Send), inspecting sent messages, managing lists, user profiles, preferences, device tokens, notification templates, brands, automations, audiences, tenants, bulk jobs, audit events, and translations. All requests are authenticated with a Bearer API key. Endpoint paths are grounded in Courier''s published API reference; request and response bodies are modeled and simplified.'
+  version: 2024-01
+  contact:
+    name: Courier
+    url: https://www.courier.com
+  x-endpoint-confidence: Paths and methods are grounded in the Courier API reference (https://www.courier.com/docs/reference). Schemas are modeled, not exhaustive.
+servers:
+- url: https://api.courier.com
+  description: Courier production API
+security:
+- bearerAuth: []
+tags:
+- name: Bulk
+  description: One-to-many sends via jobs.
+paths:
+  /bulk:
+    post:
+      operationId: createBulkJob
+      tags:
+      - Bulk
+      summary: Create a bulk job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  $ref: '#/components/schemas/InboundBulkMessage'
+      responses:
+        '200':
+          description: The created bulk job.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+  /bulk/{job_id}:
+    parameters:
+    - $ref: '#/components/parameters/JobId'
+    get:
+      operationId: getBulkJob
+      tags:
+      - Bulk
+      summary: Get a bulk job
+      responses:
+        '200':
+          description: The bulk job status.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+    post:
+      operationId: addUsersToBulkJob
+      tags:
+      - Bulk
+      summary: Add users to a bulk job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                users:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+      responses:
+        '204':
+          description: The users were added.
+  /bulk/{job_id}/run:
+    parameters:
+    - $ref: '#/components/parameters/JobId'
+    post:
+      operationId: runBulkJob
+      tags:
+      - Bulk
+      summary: Run a bulk job
+      responses:
+        '202':
+          description: The bulk job started running.
+  /bulk/{job_id}/users:
+    parameters:
+    - $ref: '#/components/parameters/JobId'
+    get:
+      operationId: listBulkJobUsers
+      tags:
+      - Bulk
+      summary: List users in a bulk job
+      responses:
+        '200':
+          description: The users in the bulk job.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+components:
+  schemas:
+    InboundBulkMessage:
+      type: object
+      properties:
+        template:
+          type: string
+        brand:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+        event:
+          type: string
+        locale:
+          type: object
+          additionalProperties: true
+  parameters:
+    JobId:
+      name: job_id
+      in: path
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Courier API key passed as `Authorization: Bearer <YOUR_API_KEY>`. Keys are found in the Courier settings under API Keys and are environment scoped (test vs production).'

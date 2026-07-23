@@ -1,0 +1,157 @@
+openapi: 3.0.3
+info:
+  title: Courier Audiences Tenants API
+  description: 'Courier is notification infrastructure that orchestrates transactional and product messaging across email, SMS, push, chat, and an in-app inbox from a single REST API. This document models the primary public endpoints under the base URL https://api.courier.com: sending notifications (Send), inspecting sent messages, managing lists, user profiles, preferences, device tokens, notification templates, brands, automations, audiences, tenants, bulk jobs, audit events, and translations. All requests are authenticated with a Bearer API key. Endpoint paths are grounded in Courier''s published API reference; request and response bodies are modeled and simplified.'
+  version: 2024-01
+  contact:
+    name: Courier
+    url: https://www.courier.com
+  x-endpoint-confidence: Paths and methods are grounded in the Courier API reference (https://www.courier.com/docs/reference). Schemas are modeled, not exhaustive.
+servers:
+- url: https://api.courier.com
+  description: Courier production API
+security:
+- bearerAuth: []
+tags:
+- name: Tenants
+  description: Organizations/accounts for multi-tenant apps.
+paths:
+  /tenants:
+    get:
+      operationId: listTenants
+      tags:
+      - Tenants
+      summary: List tenants
+      responses:
+        '200':
+          description: A paged list of tenants.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  has_more:
+                    type: boolean
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tenant'
+  /tenants/{tenant_id}:
+    parameters:
+    - name: tenant_id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getTenant
+      tags:
+      - Tenants
+      summary: Get a tenant
+      responses:
+        '200':
+          description: The requested tenant.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tenant'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: putTenant
+      tags:
+      - Tenants
+      summary: Create or replace a tenant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantInput'
+      responses:
+        '200':
+          description: The created or replaced tenant.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tenant'
+    delete:
+      operationId: deleteTenant
+      tags:
+      - Tenants
+      summary: Delete a tenant
+      responses:
+        '204':
+          description: The tenant was deleted.
+  /tenants/{tenant_id}/users:
+    parameters:
+    - name: tenant_id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: listTenantUsers
+      tags:
+      - Tenants
+      summary: List users in a tenant
+      responses:
+        '200':
+          description: The users associated with the tenant.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  has_more:
+                    type: boolean
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+components:
+  schemas:
+    Tenant:
+      allOf:
+      - $ref: '#/components/schemas/TenantInput'
+      - type: object
+        properties:
+          id:
+            type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        type:
+          type: string
+    TenantInput:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        parent_tenant_id:
+          type: string
+        default_preferences:
+          type: object
+          additionalProperties: true
+        properties:
+          type: object
+          additionalProperties: true
+        brand_id:
+          type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Courier API key passed as `Authorization: Bearer <YOUR_API_KEY>`. Keys are found in the Courier settings under API Keys and are environment scoped (test vs production).'

@@ -1,0 +1,142 @@
+openapi: 3.0.3
+info:
+  title: Courier Audiences Send API
+  description: 'Courier is notification infrastructure that orchestrates transactional and product messaging across email, SMS, push, chat, and an in-app inbox from a single REST API. This document models the primary public endpoints under the base URL https://api.courier.com: sending notifications (Send), inspecting sent messages, managing lists, user profiles, preferences, device tokens, notification templates, brands, automations, audiences, tenants, bulk jobs, audit events, and translations. All requests are authenticated with a Bearer API key. Endpoint paths are grounded in Courier''s published API reference; request and response bodies are modeled and simplified.'
+  version: 2024-01
+  contact:
+    name: Courier
+    url: https://www.courier.com
+  x-endpoint-confidence: Paths and methods are grounded in the Courier API reference (https://www.courier.com/docs/reference). Schemas are modeled, not exhaustive.
+servers:
+- url: https://api.courier.com
+  description: Courier production API
+security:
+- bearerAuth: []
+tags:
+- name: Send
+  description: Dispatch a notification across channels.
+paths:
+  /send:
+    post:
+      operationId: sendMessage
+      tags:
+      - Send
+      summary: Send a message
+      description: Dispatches a single notification to one or more recipients, routed across channels using a template or inline content, per-recipient routing, data, and overrides. Returns a requestId used to track the resulting messages.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendRequest'
+      responses:
+        '202':
+          description: The send request was accepted for processing.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  responses:
+    BadRequest:
+      description: The request was malformed or failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        type:
+          type: string
+    Recipient:
+      type: object
+      properties:
+        user_id:
+          type: string
+        email:
+          type: string
+        phone_number:
+          type: string
+        list_id:
+          type: string
+        audience_id:
+          type: string
+        tenant_id:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+        preferences:
+          type: object
+          additionalProperties: true
+    SendRequest:
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: object
+          description: The message to send.
+          properties:
+            to:
+              description: One recipient object or an array of recipients.
+              oneOf:
+              - $ref: '#/components/schemas/Recipient'
+              - type: array
+                items:
+                  $ref: '#/components/schemas/Recipient'
+            template:
+              type: string
+              description: The notification template id to send.
+            content:
+              type: object
+              description: Inline elemental content to send instead of a template.
+              additionalProperties: true
+            brand_id:
+              type: string
+            data:
+              type: object
+              additionalProperties: true
+            routing:
+              type: object
+              properties:
+                method:
+                  type: string
+                  enum:
+                  - all
+                  - single
+                channels:
+                  type: array
+                  items:
+                    type: string
+            channels:
+              type: object
+              additionalProperties: true
+            providers:
+              type: object
+              additionalProperties: true
+            metadata:
+              type: object
+              additionalProperties: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Courier API key passed as `Authorization: Bearer <YOUR_API_KEY>`. Keys are found in the Courier settings under API Keys and are environment scoped (test vs production).'

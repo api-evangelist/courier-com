@@ -1,0 +1,157 @@
+openapi: 3.0.3
+info:
+  title: Courier Audiences Brands API
+  description: 'Courier is notification infrastructure that orchestrates transactional and product messaging across email, SMS, push, chat, and an in-app inbox from a single REST API. This document models the primary public endpoints under the base URL https://api.courier.com: sending notifications (Send), inspecting sent messages, managing lists, user profiles, preferences, device tokens, notification templates, brands, automations, audiences, tenants, bulk jobs, audit events, and translations. All requests are authenticated with a Bearer API key. Endpoint paths are grounded in Courier''s published API reference; request and response bodies are modeled and simplified.'
+  version: 2024-01
+  contact:
+    name: Courier
+    url: https://www.courier.com
+  x-endpoint-confidence: Paths and methods are grounded in the Courier API reference (https://www.courier.com/docs/reference). Schemas are modeled, not exhaustive.
+servers:
+- url: https://api.courier.com
+  description: Courier production API
+security:
+- bearerAuth: []
+tags:
+- name: Brands
+  description: Reusable logos, colors, and email styling.
+paths:
+  /brands:
+    get:
+      operationId: listBrands
+      tags:
+      - Brands
+      summary: List brands
+      responses:
+        '200':
+          description: A paged list of brands.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paging:
+                    $ref: '#/components/schemas/Paging'
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Brand'
+    post:
+      operationId: createBrand
+      tags:
+      - Brands
+      summary: Create a brand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrandInput'
+      responses:
+        '200':
+          description: The created brand.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Brand'
+  /brands/{brand_id}:
+    parameters:
+    - name: brand_id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getBrand
+      tags:
+      - Brands
+      summary: Get a brand
+      responses:
+        '200':
+          description: The requested brand.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Brand'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: replaceBrand
+      tags:
+      - Brands
+      summary: Replace a brand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrandInput'
+      responses:
+        '200':
+          description: The replaced brand.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Brand'
+    delete:
+      operationId: deleteBrand
+      tags:
+      - Brands
+      summary: Delete a brand
+      responses:
+        '204':
+          description: The brand was deleted.
+components:
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    BrandInput:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        settings:
+          type: object
+          additionalProperties: true
+        snippets:
+          type: object
+          additionalProperties: true
+    Brand:
+      allOf:
+      - $ref: '#/components/schemas/BrandInput'
+      - type: object
+        properties:
+          id:
+            type: string
+          version:
+            type: string
+          created:
+            type: integer
+          updated:
+            type: integer
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        type:
+          type: string
+    Paging:
+      type: object
+      properties:
+        cursor:
+          type: string
+        more:
+          type: boolean
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Courier API key passed as `Authorization: Bearer <YOUR_API_KEY>`. Keys are found in the Courier settings under API Keys and are environment scoped (test vs production).'
