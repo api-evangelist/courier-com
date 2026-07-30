@@ -11,7 +11,20 @@ description: Courier is notification infrastructure for product and engineering 
   users/profiles, lists, tenants for multi-tenant apps, translations, bulk sends,
   and audit events, and is wrapped by official server SDKs (Node, Python, Go, Ruby,
   PHP, Java) and a CLI.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/courier-com.png
 tags:
 - Notifications
 - Messaging
@@ -25,303 +38,622 @@ created: '2026-07-02'
 modified: '2026-07-02'
 specificationVersion: '0.19'
 apis:
-- aid: courier-com:courier-com-send-api
-  name: Courier Send API
-  tags:
-  - Send
-  - Notifications
-  - Multi-Channel
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/send/send-a-message
-  baseURL: https://api.courier.com
-  properties:
-  - url: https://www.courier.com/docs/reference/send/send-a-message
-    type: APIReference
-  - url: https://www.courier.com/docs/sending/index
-    type: Documentation
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: The core POST /send endpoint. Dispatches a single notification to one
-    or more recipients and routes it across channels (email, SMS, push, chat, inbox)
-    using a template or inline content, per-recipient routing, data, and overrides.
-- aid: courier-com:courier-com-messages-api
-  name: Courier Messages API
-  tags:
-  - Messages
-  - Delivery Status
-  - Tracking
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/messages
-  baseURL: https://api.courier.com
-  properties:
-  - url: https://www.courier.com/docs/reference/messages
-    type: APIReference
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: List and inspect sent messages - retrieve a message, its rendered
-    content, its delivery/engagement history (ENQUEUED, SENT, DELIVERED, OPENED,
-    CLICKED), cancel an enqueued message, and archive messages.
-- aid: courier-com:courier-com-lists-api
-  name: Courier Lists API
-  tags:
-  - Lists
-  - Subscriptions
-  - Audiences
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/lists
-  baseURL: https://api.courier.com
-  properties:
-  - url: https://www.courier.com/docs/reference/lists
-    type: APIReference
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: Manage subscription lists and their subscribers - create/replace,
-    list, get, delete, and restore lists, and add, subscribe, list, and remove the
-    users subscribed to a list for group and topic-based sends.
-- aid: courier-com:courier-com-user-profiles-api
-  name: Courier User Profiles API
-  tags:
-  - Profiles
-  - Users
-  - Recipients
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/profiles
-  baseURL: https://api.courier.com
-  properties:
-  - url: https://www.courier.com/docs/reference/profiles
-    type: APIReference
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: Store and manage recipient profiles keyed by your user id - create,
-    get, replace, merge/patch, and delete a profile, and list the subscription lists
-    a user belongs to. Profiles hold channel addresses (email, phone, tokens) and
-    custom data used at send time.
-- aid: courier-com:courier-com-user-preferences-api
-  name: Courier User Preferences API
-  tags:
-  - Preferences
-  - Topics
-  - Opt-Out
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/user-preferences
-  baseURL: https://api.courier.com
-  properties:
-  - url: https://www.courier.com/docs/reference/user-preferences
-    type: APIReference
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: Read and update a recipient's notification preferences - list all
-    topic preferences for a user, get a single topic, and update a user's channel
-    opt-in/opt-out status per subscription topic.
-- aid: courier-com:courier-com-device-tokens-api
-  name: Courier Device Tokens API
-  tags:
-  - Push
-  - Device Tokens
-  - Mobile
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/token-management
-  baseURL: https://api.courier.com
-  properties:
-  - url: https://www.courier.com/docs/reference/token-management
-    type: APIReference
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: Register and manage the push notification device tokens (APNS, FCM,
-    Expo) attached to a user - put, patch, get one, list all, and delete tokens so
-    push notifications route to the right devices.
-- aid: courier-com:courier-com-notification-templates-api
-  name: Courier Notification Templates API
-  tags:
-  - Templates
-  - Notifications
-  - Content
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/notifications
-  baseURL: https://api.courier.com
-  properties:
-  - url: https://www.courier.com/docs/reference/notifications
-    type: APIReference
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: Programmatic access to notification templates designed in the Courier
-    studio - list notifications, get and update their content blocks, and submit a
-    draft to publish. Templates are referenced by id in the Send API.
-- aid: courier-com:courier-com-brands-api
-  name: Courier Brands API
-  tags:
-  - Brands
-  - Theming
-  - Branding
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/brands
-  baseURL: https://api.courier.com
-  properties:
-  - url: https://www.courier.com/docs/reference/brands
-    type: APIReference
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: Manage reusable brands - the logos, colors, and email template
-    styling applied to notifications. Create, get, list, replace, and delete brands
-    that are referenced by id at send time or on a template.
-- aid: courier-com:courier-com-automations-api
-  name: Courier Automations API
-  tags:
-  - Automations
-  - Workflows
-  - Orchestration
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/automations
-  baseURL: https://api.courier.com
-  properties:
-  - url: https://www.courier.com/docs/reference/automations
-    type: APIReference
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: Invoke Courier Automations - multi-step notification workflows with
-    delays, throttling, conditional branches, and batched sends. Invoke an ad-hoc
-    automation run or invoke a saved automation template by id.
 - aid: courier-com:courier-com-audiences-api
   name: Courier Audiences API
+  description: Dynamic audiences defined by profile filters.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
   tags:
   - Audiences
-  - Segmentation
-  - Filters
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/audiences
-  baseURL: https://api.courier.com
   properties:
-  - url: https://www.courier.com/docs/reference/audiences
-    type: APIReference
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: Define dynamic audiences from filters on user profile attributes -
-    create/update, get, list, and delete an audience, and list the members that
-    currently match. Audiences can be targeted by the Send API as recipients.
-- aid: courier-com:courier-com-tenants-api
-  name: Courier Tenants API
-  tags:
-  - Tenants
-  - Multi-Tenant
-  - Organizations
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/tenants
-  baseURL: https://api.courier.com
-  properties:
-  - url: https://www.courier.com/docs/reference/tenants
-    type: APIReference
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: Model organizations/accounts in multi-tenant products - create/replace,
-    get, list, and delete tenants, manage tenant default preferences, and associate
-    users with one or many tenants for scoped branding and preferences.
-- aid: courier-com:courier-com-bulk-api
-  name: Courier Bulk API
-  tags:
-  - Bulk
-  - Batch
-  - High Volume
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/bulk
-  baseURL: https://api.courier.com
-  properties:
-  - url: https://www.courier.com/docs/reference/bulk
-    type: APIReference
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: Send the same notification to many recipients efficiently via a job -
-    create a bulk job, add users to it, run it, get the job status, and list the
-    users in the job. Designed for large one-to-many sends.
+  - type: OpenAPI
+    url: openapi/courier-com-audiences-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
 - aid: courier-com:courier-com-audit-events-api
   name: Courier Audit Events API
+  description: Workspace audit events.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
   tags:
   - Audit Events
-  - Compliance
-  - Logs
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/audit-events
-  baseURL: https://api.courier.com
   properties:
-  - url: https://www.courier.com/docs/reference/audit-events
-    type: APIReference
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: Retrieve workspace audit events for security and compliance - list all
-    audit events and get a single event by id, covering administrative and
-    configuration changes in the Courier workspace.
+  - type: OpenAPI
+    url: openapi/courier-com-audit-events-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
+- aid: courier-com:courier-com-automations-api
+  name: Courier Automations API
+  description: Multi-step notification workflows.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
+  tags:
+  - Automations
+  properties:
+  - type: OpenAPI
+    url: openapi/courier-com-automations-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
+- aid: courier-com:courier-com-brands-api
+  name: Courier Brands API
+  description: Reusable logos, colors, and email styling.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
+  tags:
+  - Brands
+  properties:
+  - type: OpenAPI
+    url: openapi/courier-com-brands-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
+- aid: courier-com:courier-com-bulk-api
+  name: Courier Bulk API
+  description: One-to-many sends via jobs.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
+  tags:
+  - Bulk
+  properties:
+  - type: OpenAPI
+    url: openapi/courier-com-bulk-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
+- aid: courier-com:courier-com-device-tokens-api
+  name: Courier Device Tokens API
+  description: Push notification device tokens for a user.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
+  tags:
+  - Device Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/courier-com-device-tokens-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
+- aid: courier-com:courier-com-lists-api
+  name: Courier Lists API
+  description: Subscription lists and their subscribers.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
+  tags:
+  - Lists
+  properties:
+  - type: OpenAPI
+    url: openapi/courier-com-lists-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
+- aid: courier-com:courier-com-messages-api
+  name: Courier Messages API
+  description: Inspect, track, cancel, and archive sent messages.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
+  tags:
+  - Messages
+  properties:
+  - type: OpenAPI
+    url: openapi/courier-com-messages-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
+- aid: courier-com:courier-com-notification-templates-api
+  name: Courier Notification Templates API
+  description: Notification templates designed in the Courier studio.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
+  tags:
+  - Notification Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/courier-com-notification-templates-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
+- aid: courier-com:courier-com-send-api
+  name: Courier Send API
+  description: Dispatch a notification across channels.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
+  tags:
+  - Send
+  properties:
+  - type: OpenAPI
+    url: openapi/courier-com-send-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
+- aid: courier-com:courier-com-tenants-api
+  name: Courier Tenants API
+  description: Organizations/accounts for multi-tenant apps.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
+  tags:
+  - Tenants
+  properties:
+  - type: OpenAPI
+    url: openapi/courier-com-tenants-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
 - aid: courier-com:courier-com-translations-api
   name: Courier Translations API
+  description: Localization strings per domain and locale.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
   tags:
   - Translations
-  - Localization
-  - i18n
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://www.courier.com/docs/reference/translations
-  baseURL: https://api.courier.com
   properties:
-  - url: https://www.courier.com/docs/reference/translations
-    type: APIReference
-  - url: openapi/courier-com-openapi.yml
-    type: OpenAPI
-  - url: collections/courier-com.postman_collection.json
-    type: PostmanCollection
-  - url: collections/courier-com.opencollection.json
-    type: OpenCollection
-  description: Manage localization strings for notifications - get and update the
-    translation (.po) content for a given domain and locale so notifications render
-    in the recipient's language.
+  - type: OpenAPI
+    url: openapi/courier-com-translations-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
+- aid: courier-com:courier-com-user-preferences-api
+  name: Courier User Preferences API
+  description: Per-user, per-topic notification preferences.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
+  tags:
+  - User Preferences
+  properties:
+  - type: OpenAPI
+    url: openapi/courier-com-user-preferences-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
+- aid: courier-com:courier-com-user-profiles-api
+  name: Courier User Profiles API
+  description: Recipient profiles keyed by your user id.
+  humanURL: https://www.courier.com/docs/reference/send/send-a-message
+  baseURL: https://api.courier.com
+  tags:
+  - User Profiles
+  properties:
+  - type: OpenAPI
+    url: openapi/courier-com-user-profiles-api-openapi.yml
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/send/send-a-message
+  - type: Documentation
+    url: https://www.courier.com/docs/sending/index
+  - type: PostmanCollection
+    url: collections/courier-com.postman_collection.json
+  - type: OpenCollection
+    url: collections/courier-com.opencollection.json
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/messages
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/lists
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/profiles
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/user-preferences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/token-management
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/notifications
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/brands
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/automations
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audiences
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/tenants
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/bulk
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/audit-events
+  - type: APIReference
+    url: https://www.courier.com/docs/reference/translations
 common:
 - type: AgenticAccess
   url: agentic-access/courier-com-agentic-access.yml
