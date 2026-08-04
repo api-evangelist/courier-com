@@ -1,0 +1,40 @@
+{
+  "provider": "courier-com",
+  "sources": [
+    "courier-com-audiences-api-openapi.yml",
+    "courier-com-audit-events-api-openapi.yml",
+    "courier-com-automations-api-openapi.yml",
+    "courier-com-brands-api-openapi.yml",
+    "courier-com-bulk-api-openapi.yml",
+    "courier-com-device-tokens-api-openapi.yml",
+    "courier-com-lists-api-openapi.yml",
+    "courier-com-messages-api-openapi.yml",
+    "courier-com-notification-templates-api-openapi.yml",
+    "courier-com-send-api-openapi.yml",
+    "courier-com-tenants-api-openapi.yml",
+    "courier-com-translations-api-openapi.yml",
+    "courier-com-user-preferences-api-openapi.yml",
+    "courier-com-user-profiles-api-openapi.yml"
+  ],
+  "outputs": [
+    "courier-com-audiences-api-openapi.yml",
+    "courier-com-audit-events-api-openapi.yml",
+    "courier-com-automations-api-openapi.yml",
+    "courier-com-brands-api-openapi.yml",
+    "courier-com-bulk-api-openapi.yml",
+    "courier-com-device-tokens-api-openapi.yml",
+    "courier-com-lists-api-openapi.yml",
+    "courier-com-messages-api-openapi.yml",
+    "courier-com-notification-templates-api-openapi.yml",
+    "courier-com-send-api-openapi.yml",
+    "courier-com-tenants-api-openapi.yml",
+    "courier-com-translations-api-openapi.yml",
+    "courier-com-user-preferences-api-openapi.yml",
+    "courier-com-user-profiles-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
